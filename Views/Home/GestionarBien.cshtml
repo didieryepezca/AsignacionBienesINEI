@@ -1,0 +1,188 @@
+﻿@model AsignacionBienesINEI.Models.Entities.Bien;
+@{
+    ViewData["Title"] = "Gestionar Bien";
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/bienes/manage-bien.js"></script>
+}
+
+<script type="text/javascript">
+
+    var result = '@ViewBag.result';
+
+</script>
+
+<div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Gestionar Bien
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="manage-bien-form" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <input type="hidden" asp-for="Id" />
+                                <div class="col-xl-3">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Numero" class="form-label">Número</label>
+                                                <input asp-for="Numero" type="text" class="form-control">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Nombre" class="form-label">Nombre</label>
+                                                <input asp-for="Nombre" type="text" class="form-control" required>
+                                                @Html.ValidationMessageFor(model =>model.Nombre, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Plaqueta" class="form-label">Plaqueta</label>
+                                                <input asp-for="Plaqueta" type="text" class="form-control" required>
+                                                @Html.ValidationMessageFor(model =>model.Plaqueta, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Sbn" class="form-label">Sbn</label>
+                                                <input asp-for="Sbn" type="text" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Marca" class="form-label">Marca</label>
+                                                <input asp-for="Marca" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Modelo" class="form-label">Modelo</label>
+                                                <input asp-for="Modelo" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Serie" class="form-label">Serie</label>
+                                                <input asp-for="Serie" type="text" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Tipo" class="form-label">Tipo</label>
+                                                <input asp-for="Tipo" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Dimensiones" class="form-label">Dimensiones</label>
+                                                <input asp-for="Dimensiones" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Color" class="form-label">Color</label>
+                                                <input asp-for="Color" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Serie" class="form-label">Serie</label>
+                                                <input asp-for="Serie" type="text" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Estado" class="form-label">Estado</label>
+                                                <span class="d-none d-sm-inline">
+                                                    <select asp-for="Estado" class="form-select">
+                                                        <option value="B">B</option>
+                                                        <option value="M">M</option>
+                                                        <option value="R">R</option>
+                                                    </select>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xl-3">
+                                    <div class="row">
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Operativo" class="form-label">Operativo</label>
+                                                <span class="d-none d-sm-inline">
+                                                    <select asp-for="Operativo" class="form-select">
+                                                        <option value="SI">SI</option>
+                                                        <option value="NO">NO</option>
+                                                    </select>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Proy" class="form-label">Proyecto</label>
+                                                <input asp-for="Proy" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-12">
+                                            <div class="mb-3">
+                                                <label asp-for="Observaciones" class="form-label">Observaciones</label>
+                                                <textarea asp-for="Observaciones" type="text" class="form-control"> </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer text-end">
+                                <div class="d-flex">
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-link">Cancelar</a>
+                                    <div class="col">
+                                        <div class="btn-list justify-content-end">
+                                            <button name="accion" value="E" type="submit" class="btn btn-danger ms-auto">Eliminar</button>
+                                            <button name="accion" value="A" type="submit" class="btn btn-primary ms-auto">Actualizar</button>
+                                        </div>
+                                    </div>                           
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,117 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Registrar";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - Asignación de Bienes</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="~/css/demo.min.css" />
+    <link rel="stylesheet" href="~/css/tabler.min.css" />
+    <link rel="stylesheet" href="~/css/tabler-flags.min.css" />
+    <link rel="stylesheet" href="~/css/tabler-vendors.min.css" />
+
+    <link rel="stylesheet" href="~/css/loading-spinner.css">
+
+</head>
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+    <div class="page page-center">
+
+        <div class="container-tight py-4">
+            <div class="text-center mb-4">
+                <a href="#">
+                    <h2>ASIGNACION DE BIENES E.I.R.L</h2>
+                </a>
+            </div>
+            <div id="overlay-spinner" class="loading loading--full-height" style="display:none"></div>
+            <form class="card card-md" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card-body">    
+                    <div class="mb-3">                        
+                        <input id="txtDNI" asp-for="Input.DNI" type="text" class="form-control" placeholder="Ingrese DNI">
+                        @Html.ValidationMessageFor(model => model.Input.DNI, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">                        
+                        <input id="txtNombres" asp-for="Input.Nombres" type="text" class="form-control" placeholder="Ingrese sus Nombres">
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input asp-for="Input.apellidoPaterno" type="text" class="form-control" placeholder="Ingrese Apellido Paterno">
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input asp-for="Input.apellidoMaterno" type="text" class="form-control" placeholder="Ingrese Apellido Materno">
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input id="txtEmail" asp-for="Input.Email" type="email" class="form-control" placeholder="Ingrese email">
+                        @Html.ValidationMessageFor(model => model.Input.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-3">                        
+                        <div class="input-group input-group-flat">
+                            <input asp-for="Input.Password" type="password" class="form-control" placeholder="Contraseña" autocomplete="off">
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Input.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">                        
+                        <div class="input-group input-group-flat">
+                            <input asp-for="Input.ConfirmPassword" type="password" class="form-control" placeholder="Confirmar Contraseña" autocomplete="off">
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Input.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>                                  
+
+                    <div class="mb-3">                        
+                        <input id="txtDNI" asp-for="Input.fechaNacimiento" type="text" class="form-control" placeholder="Ingrese de Fecha Nacimiento: dd/mm/AAAA">
+                        @Html.ValidationMessageFor(model => model.Input.fechaNacimiento, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input id="txtDNI" asp-for="Input.condicionLaboral" type="text" class="form-control" placeholder="Ingrese Condición Laboral">
+                        @Html.ValidationMessageFor(model => model.Input.condicionLaboral, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input id="txtDNI" asp-for="Input.profesionEstudio" type="text" class="form-control" placeholder="Ingrese Profesión/Estudio">
+                        @Html.ValidationMessageFor(model => model.Input.profesionEstudio, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3">                        
+                        <input id="txtDNI" asp-for="Input.gradoAcadémico" type="text" class="form-control" placeholder="Ingrese Grado Académico">
+                        @Html.ValidationMessageFor(model => model.Input.gradoAcadémico, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">Registrarme</button>
+                    </div>
+                </div>
+            </form>
+            <div class="text-center text-muted mt-3">
+                ¿Ya estás registrado? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" tabindex="-1">Entrar a la App</a>
+            </div>
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="~/js/tabler/tabler.min.js"></script>
+
+    <script type="text/javascript">
+        document.querySelector('button[type="submit"]').addEventListener("click", function () {
+            document.getElementById("overlay-spinner").removeAttribute("style");
+        });
+    </script>
+</body>
+</html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,73 @@
+﻿@page
+@model LoginModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Log in";
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - Asignación de Bienes</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="~/css/demo.min.css" />
+    <link rel="stylesheet" href="~/css/tabler.min.css" />
+    <link rel="stylesheet" href="~/css/tabler-flags.min.css" />
+    <link rel="stylesheet" href="~/css/tabler-vendors.min.css" />
+    <link rel="stylesheet" href="~/css/loading-spinner.css" />
+</head>
+<body class="antialiased border-top-wide border-primary d-flex flex-column">
+    <div class="page page-center">
+        <div class="container-tight py-4">
+            <div class="text-center mb-4">
+                <a href="#">
+                    <h2>ASIGNACION DE BIENES E.I.R.L</h2>
+                </a>
+            </div>
+            <div id="overlay-spinner" class="loading loading--full-height" style="display:none"></div>
+            <form id="login-form" class="card card-md" method="POST" autocomplete="off">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card-body">                    
+                    <div class="mb-3">
+                        
+                        <input asp-for="Input.Email" type="email" class="form-control" placeholder="Ingrese su Email" required>
+                        @Html.ValidationMessageFor(model => model.Input.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <div class="input-group input-group-flat">
+                            <input asp-for="Input.Password" type="password" class="form-control" placeholder="Contraseña" autocomplete="off" required>
+                        </div>
+                    </div>                   
+                    
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                    </div>
+                </div>
+
+            </form>
+           @* <div class="text-center text-muted mt-3">
+                ¿No tienes una cuenta? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrarme</a>
+            </div>*@
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="./dist/js/tabler.min.js"></script>
+    <script type="text/javascript">
+        function logSubmit(event) {
+            document.getElementById("overlay-spinner").removeAttribute("style");
+        }
+        const form = document.getElementById('login-form');
+        form.addEventListener('submit', logSubmit);
+
+    </script>
+</body>
+</html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

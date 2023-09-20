@@ -1,0 +1,255 @@
+﻿@model IEnumerable<AsignacionBienesINEI.Models.Entities.AsignacionDetalle>
+@{
+    ViewData["Title"] = "Lista de Asignaciones";
+}
+<script type="text/javascript">
+    var result = '@ViewBag.result';
+    document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker && (new Litepicker({
+            element: document.getElementById('datepicker'),
+            buttonText: {
+                previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="15 6 9 12 15 18" /></svg>`,
+                nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 6 15 12 9 18" /></svg>`,
+            },
+        }));
+    });
+
+    var PdfAsignacionUrl = '@(Url.Action("GenerateAsignacionPdfFileSinFirma", "Asignacion"))';
+    var PdfAsignacionFirmadaUrl = '@(Url.Action("DownloadPDFAsignacionFirmada", "Asignacion"))';
+</script>
+
+@section Scripts {
+    <script src="~/js/asignaciones/asignaciones-lista.js"></script>
+}
+
+<form asp-action="Lista" method="get">
+
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page title -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            Lista de Asignaciones
+                        </h2>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+
+                            <div class="mb-3">
+                                <span class="d-none d-sm-inline">
+                                    <select name="estado" asp-items="@(new SelectList(ViewBag.estados, "Id", "Nombre"))" class="form-select">
+                                        <option value="" selected="Todos">Todos</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            @{
+                                string fecha = ViewBag.fecha;
+                            }
+                            <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first">
+                                <div class="input">
+                                    <input class="form-control datepicker-inline"
+                                           name="fecha"
+                                           id="datepicker"
+                                           value="@fecha"
+                                           placeholder="Fecha" />
+                                </div>
+                            </div>
+                            @{
+                                var search = 'B';
+                            }
+                            <button class="btn btn-white d-sm-inline-block" type="submit" value="@search" name="accion">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <desc>Download more icon variants from https://tabler-icons.io/i/search</desc>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <circle cx="10" cy="10" r="7"></circle>
+                                    <line x1="21" y1="21" x2="15" y2="15"></line>
+                                </svg>
+                                Filtrar
+                            </button>
+
+                            <a asp-action="Nueva" class="btn btn-primary d-none d-sm-inline-block">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Nueva Asignación
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row row-cards">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>Acciones</th>
+                                            <th>Dependencia</th>
+                                            <th>Equipo</th>
+                                            <th>Control Patrimonial</th>
+                                            <th>Marca</th>
+                                            <th>Modelo</th>
+                                            <th>Responsable</th>
+                                            <th>Fecha De Asignación</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int count = 1;
+                                        }
+                                        @foreach (var detalleAsignacion in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @count
+                                                </td>
+                                                @if (detalleAsignacion.Asignacion!.IdEstado == 1)
+                                                {
+                                                    <td>
+                                                        <a class="btn btn-link" style="cursor:pointer"
+                                                           onclick="DownloadAsignacionPDF('@detalleAsignacion.IdAsignacion');">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pdf" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z"></path>
+                                                                    <path d="M3 12h2a2 2 0 1 0 0 -4h-2v8"></path>
+                                                                    <path d="M17 12h3"></path>
+                                                                    <path d="M21 8h-4v8"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+
+                                                        <a class="btn-link" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#modal-upload-ficha"
+                                                           onclick="LoadModalTitleAndCode('@detalleAsignacion.Asignacion.Id')">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-up" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M12 18.004h-5.343c-2.572 -.004 -4.657 -2.011 -4.657 -4.487c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.38 0 2.57 .811 3.128 1.986"></path>
+                                                                    <path d="M19 22v-6"></path>
+                                                                    <path d="M22 19l-3 -3l-3 3"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+
+                                                }
+                                                else if (detalleAsignacion.Asignacion!.IdEstado == 2)
+                                                {
+                                                    <td>
+                                                        <a class="btn btn-link" style="cursor:pointer"
+                                                           onclick="DownloadUploadedAsignacionFirmadaPDF('@detalleAsignacion.IdAsignacion');">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pdf" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M10 8v8h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-2z"></path>
+                                                                    <path d="M3 12h2a2 2 0 1 0 0 -4h-2v8"></path>
+                                                                    <path d="M17 12h3"></path>
+                                                                    <path d="M21 8h-4v8"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+
+                                                        <a class="btn btn-link" style="cursor:pointer"
+                                                           onclick="ReleaseBien('@detalleAsignacion.IdAsignacion' , '@detalleAsignacion.Bien!.Id')">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock-open" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
+                                                                    <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                                                                    <path d="M8 11v-5a4 4 0 0 1 8 0"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+
+                                                        <a class="btn btn-link" style="cursor:pointer"
+                                                   asp-route-idAsignacion="@detalleAsignacion.IdAsignacion" asp-action="AsignacionView">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <a class="btn-link" style="cursor:pointer"
+                                                           onclick="DownloadUploadedAsignacionFirmadaPDF('@detalleAsignacion.IdAsignacion');">
+                                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                        | OLD
+                                                    </td>
+                                                }
+                                                <td>@detalleAsignacion.Asignacion!.Responsable!.Odei</td>
+                                                <td>@detalleAsignacion.Bien!.Nombre</td>
+                                                <td><strong>@detalleAsignacion.Bien!.Plaqueta</strong></td>
+                                                <td>@detalleAsignacion.Bien!.Marca</td>
+                                                <td>@detalleAsignacion.Bien!.Modelo</td>
+                                                <td><strong>@detalleAsignacion.Asignacion!.Responsable!.Nombres</strong></td>
+                                                <td>@detalleAsignacion.Asignacion!.FechaAsignacion</td>
+                                                @{
+                                                    count = count + 1;
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-blur fade" id="modal-upload-ficha" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modal-upload-pdf-title" class="modal-title">Titulo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="form-label">PDF</div>
+                        <input id="pdfInput" type="file" class="form-control" enctype="multipart/form-data">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-link me-auto" data-bs-dismiss="modal">Cancelar</button>
+                    <button onclick="UploadAsignacionPDF()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Subir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

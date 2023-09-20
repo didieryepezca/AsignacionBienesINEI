@@ -1,0 +1,13 @@
+﻿@model List<AsignacionBienesINEI.Models.ViewModels.AsignacionesPorUsuarioViewModel>
+
+@foreach (var asignado in Model)
+{
+    <tr>
+        <td>@asignado.Equipo</td>
+        <td>@asignado.Marca</td>
+        <td>@asignado.Modelo</td>
+        <td class="td-truncate">@asignado.CP</td>
+        <td>@asignado.DireccionTecnica</td>
+        <td>@asignado.Fecha</td>        
+    </tr>
+}

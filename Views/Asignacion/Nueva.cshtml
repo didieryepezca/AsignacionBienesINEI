@@ -1,0 +1,331 @@
+﻿@model AsignacionBienesINEI.Models.ViewModels.NuevaAsignacionViewModel
+@{
+    ViewData["Title"] = "Nueva Asignacion";
+}
+
+@section Scripts {
+    <script src="~/js/asignaciones/nueva.js"></script>
+}
+
+<script type="text/javascript">
+    var result = '@ViewBag.result';
+    var searchBienesAutoCompleteUrl = '@(Url.Action("BuscarBienes", "Asignacion", new { tipo = "A"}))';
+    var AddBienToNuevaAsignacionUrl = '@(Url.Action("OnSelectBienFromAutocomplete", "Asignacion"))';
+    var RemoveBienFromNuevaAsignacionUrl = '@(Url.Action("OnRemoveBienFromAsignacionesAgregadas", "Asignacion"))';
+    var ReporteAsignacionesPorUsuarioUrl = '@(Url.Action("GetReporteAsignacionesPorUsuario", "Asignacion"))';
+
+    var PdfAsignacionUrl = '@(Url.Action("GenerateAsignacionPdfFileSinFirma", "Asignacion"))';
+</script>
+
+<div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Asignaciones de Bienes Tics
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="asignacion-form" method="post" asp-action="Nueva" asp-controller="Asignacion">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="page-body">
+        <div class="container-xl">
+
+            <div class="row row-cards">
+                <div class="col-xl-6">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-12">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">SELECCIONAR USUARIO</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+
+                                        <div class="col-xl-12">
+                                            <div class="row">
+                                                <div class="col-md-4 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Persona a Asignar</label>
+                                                        <div class="row g-2">
+                                                            <div class="col">
+                                                                <input id="txtUsuarioNombres" type="text" asp-for="usuarioNombres" value="@Model.usuarioNombres" class="form-control" readonly>
+                                                                <input id="txtUserId" asp-for="idUsuario" value="@Model.idUsuario" type="text" class="form-control" hidden>
+                                                                @Html.ValidationMessageFor(model =>model.idUsuario, "", new { @class = "text-danger" })
+                                                            </div>
+
+                                                            <div class="col-auto">
+                                                                <a id="btnPickResponsable" data-bs-toggle="modal" data-bs-target="#modal-responsables" class="btn btn-blue btn-icon" aria-label="Button">
+                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>                                                
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xl-3">
+                                            <div class="row">
+                                                <div class="col-md-4 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">DNI</label>
+                                                        <input id="txtDNI" asp-for="usuarioDNI" value="@Model.usuarioDNI" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3">
+                                            <div class="row">
+                                                <div class="col-md-4 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Oficina</label>
+                                                        <input id="txtOdei" asp-for="usuarioOdei" value="@Model.usuarioOdei" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6">
+                                            <div class="row">
+                                                <div class="col-md-8 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Username</label>
+                                                        <input id="txtUserName" asp-for="usuarioUserName" value="@Model.usuarioUserName" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">SELECCIONAR EQUIPO INFORMATICO</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-xl-5">
+                                            <div class="row">
+                                                <div class="col-md-4 col-xl-12">
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">¿El equipo estará fuera del INEI?</label>
+                                                        <span class="d-none d-sm-inline">
+                                                            <select asp-for="equipoFueraINEI" class="form-select">
+                                                                <option value="@Model.equipoFueraINEI" selected="">Seleccione</option>
+                                                                <option value="SI">SI</option>
+                                                                <option value="NO">NO</option>
+                                                            </select>
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model =>model.equipoFueraINEI, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <div class="row">
+                                                <div class="col-md-4 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">¿El equipo estará Libre?</label>
+                                                        <span class="d-none d-sm-inline">
+                                                            <select asp-for="equipoLibre" class="form-select">
+                                                                <option value="@Model.equipoLibre" selected="">Seleccione</option>
+                                                                <option value="SI">SI</option>
+                                                                <option value="NO">NO</option>
+                                                            </select>
+                                                        </span>
+                                                        @Html.ValidationMessageFor(model =>model.equipoLibre, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-3">
+                                            <div class="row">
+                                                <div class="col-md-8 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Control Patrimonial</label>
+                                                        <div class="row g-2">
+                                                            <div class="col">
+                                                                <input id="cps" type="text" class="form-control" placeholder="Ingrese...">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <a href="#" class="btn btn-blue btn-icon" aria-label="Button">
+                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">ASIGNACIONES AÑADIDAS</h3>
+                                </div>
+                                <div class="card-body">
+                                    <label class="form-label" style="color:red">@ViewBag.asignacionesVacias</label>
+
+                                    <div class="card-table table-responsive">
+                                        <table class="table table-vcenter">
+                                            <thead>
+                                                <tr>
+                                                    <th hidden>idequipo</th>
+                                                    <th>CP</th>
+                                                    <th>Marca</th>
+                                                    <th>Modelo</th>
+                                                    <th>Dirección Técnica</th>
+                                                    <th>Fecha de Ingreso</th>
+                                                    <th>Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="partialTblBodyAsignacionesAgregadas">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-12">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">REPORTE DE ASIGNACIONES DEL USUARIO</h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="card-table table-responsive">
+                                        <table id="eqs" class="table table-vcenter">
+                                            <thead>
+                                                <tr>
+                                                    <th hidden>idequipo</th>
+                                                    <th>Equipo</th>
+                                                    <th>Marca</th>
+                                                    <th>Modelo</th>
+                                                    <th>CP</th>
+                                                    <th>Dirección Técnica</th>
+                                                    <th>Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="partialTblBodyRptAsignacionesUsuario">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-cards">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-footer text-end">
+                            <div class="mb-3">
+                                <textarea class="form-control" asp-for="observacion" value="@Model.observacion"
+                                          rows="6" placeholder="Si tiene alguna observación digitela aquí..."></textarea>
+                            </div>
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-green ms-auto">Guardar Asignación</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-blur fade" id="modal-responsables" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ASIGNAR A PERSONA</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card-table table-responsive">
+                        <table id="tblResponsables" class="table card-table table-vcenter table-striped text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th hidden>Id</th>
+                                    <th>DNI</th>
+                                    <th></th>
+                                    <th>Nombres</th>
+                                    <th>UserName</th>
+                                    <th>Dirección Técnica</th>
+                                    <th>Opción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var responsable in Model.responsables!)
+                                {
+                                    <tr>
+                                        <td hidden>@responsable.Id</td>
+                                        <td class="td-truncate">
+                                            @responsable.DNI
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            @responsable.Nombres
+                                        </td>
+                                        <td><code><strong>@responsable.UserName</strong></code></td>
+                                        <td>
+                                            @responsable.ODEI
+                                        </td>
+                                        <td>
+                                            <a onclick="SetResponsable('@responsable.Id', '@responsable.Nombres','@responsable.DNI', '@responsable.ODEI', '@responsable.UserName')"
+                                               data-bs-dismiss="modal" class="btn btn-blue">
+                                                Seleccionar
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger" data-bs-dismiss="modal">
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

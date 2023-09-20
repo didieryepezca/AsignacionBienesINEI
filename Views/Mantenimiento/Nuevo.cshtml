@@ -1,0 +1,260 @@
+﻿@model AsignacionBienesINEI.Models.ViewModels.NuevoMantenimientoViewModel
+
+@{
+    ViewData["Title"] = "Registrar Mantenimiento";
+}
+
+@section Scripts {
+    <script src="~/js/mantenimiento/nuevo.js"></script>
+}
+
+<script>
+    var result = '@ViewBag.result';    
+    var searchBienesAutoCompleteUrl = '@(Url.Action("BuscarBienes", "Asignacion", new { tipo = "M" }))';
+    var AddBienToMantenimientoUrl = '@(Url.Action("OnSelectBienFromAutocomplete", "Mantenimiento"))';
+
+
+</script>
+
+<div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Registro de Mantenimiento
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="mantenimiento-form" method="post" asp-action="Nuevo">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-cards">
+                <div class="col-xl-6">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-12">
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">DATOS DEL BIEN INFORMATICO</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+
+                                        <div class="col-xl-12">
+                                            <div class="row">
+                                                <div class="col-md-8 col-xl-12">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Control Patrimonial</label>
+                                                        <div class="row g-2">
+                                                            <div class="col">
+                                                                <input id="cps" type="text" class="form-control" placeholder="Ingrese...">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <a href="#" class="btn btn-blue btn-icon" aria-label="Button">
+                                                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-xl-12">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xl-12">
+                                                            <label class="form-label" style="color:red">@ViewBag.BienVacio</label>
+                                                            @Html.ValidationMessageFor(model =>model.equipoAgregado, "", new { @class = "text-danger" })
+                                                            <div class="card-table table-responsive">
+                                                                <table class="table table-vcenter">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>CP</th>
+                                                                            <th>Marca</th>
+                                                                            <th>Modelo</th>
+                                                                            <th>Dirección Técnica</th>
+                                                                            <th>Fecha de Ingreso</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="partialTblBodyMattoAgregado">
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xl-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Fecha de Registro</label>
+                                                                <div class="row g-2">
+                                                                    <div class="col">
+                                                                        @{
+                                                                            var fechaHoy = DateTime.Now;
+                                                                            var fechaStr = fechaHoy.ToString("dd/MM/yyyy hh:mm");
+                                                                        }
+                                                                        <input type="datetime" asp-for="fechaRegistro" value="@fechaHoy" class="form-control" readonly>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xl-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Fecha de Mantenimiento</label>
+                                                                <div class="row g-2">
+                                                                    <div class="col">
+                                                                        <input type="date" asp-for="fechaMantenimiento" value="@Model.fechaMantenimiento" class="form-control">
+                                                                        @Html.ValidationMessageFor(model =>model.fechaMantenimiento, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xl-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">ODEI</label>
+                                                                <div class="row g-2">
+                                                                    <div class="col">
+                                                                        <input type="text" asp-for="Odei" value="@Model.Odei" class="form-control" readonly>
+                                                                        @Html.ValidationMessageFor(model =>model.Odei, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-xl-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Responsable</label>
+                                                                <div class="row g-2">
+                                                                    <div class="col">
+                                                                        <input type="text" asp-for="responsable" value="@Model.responsable" class="form-control">
+                                                                        @Html.ValidationMessageFor(model =>model.responsable, "", new { @class = "text-danger" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">SITUACION ACTUAL DEL BIEN</h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="mb-3">
+                                        <div class="form-label">El bien cuenta con garantía:</div>
+                                        @Html.ValidationMessageFor(model =>model.garantia, "", new { @class = "text-danger" })
+                                        <span class="d-none d-sm-inline">
+                                            <select asp-for="garantia" class="form-select">
+                                                <option value="" selected>Seleccione</option>
+                                                <option value="VIGENTE">VIGENTE</option>
+                                                <option value="VENCIDA">VENCIDA</option>
+                                            </select>
+                                        </span>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-label">Estado:</div>
+                                        @Html.ValidationMessageFor(model =>model.estado, "", new { @class = "text-danger" })
+                                        <div>
+                                            @foreach (var estado in Model.estados)
+                                            {
+                                                <label class="form-check form-check-inline">
+                                                    @Html.RadioButtonFor(model => model.estado, estado, htmlAttributes: new {@class = "form-check-input"})
+                                                    <span class="form-check-label">@estado</span>
+                                                </label>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-label">Operatividad:</div>
+                                        @Html.ValidationMessageFor(model =>model.operatividad, "", new { @class = "text-danger" })
+                                        <div>
+                                            @foreach (var oper in Model.operatividades)
+                                            {
+                                                <label class="form-check form-check-inline">
+                                                    @Html.RadioButtonFor(model => model.operatividad, oper.Value, htmlAttributes: new {@class = "form-check-input"})
+                                                    <span class="form-check-label">@oper.Key</span>
+                                                </label>
+                                            }                                        
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-label">Equipo en Uso:</div>
+                                        @Html.ValidationMessageFor(model =>model.equipoUso, "", new { @class = "text-danger" })
+                                        <div>
+                                            @foreach (var uso in Model.usos)
+                                            {
+                                                <label class="form-check form-check-inline">
+                                                    @Html.RadioButtonFor(model => model.equipoUso, uso.Value, htmlAttributes: new {@class = "form-check-input"})
+                                                    <span class="form-check-label">@uso.Key</span>
+                                                </label>
+                                            }                                          
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-label">Activo dado de Baja:</div>
+                                        @Html.ValidationMessageFor(model =>model.equipoDadoBaja, "", new { @class = "text-danger" })
+                                        <div>
+                                            @foreach (var baja in Model.bajas)
+                                            {
+                                                <label class="form-check form-check-inline">
+                                                    @Html.RadioButtonFor(model => model.equipoDadoBaja, baja.Value, htmlAttributes: new {@class = "form-check-input"})
+                                                    <span class="form-check-label">@baja.Key</span>
+                                                </label>
+                                            }                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="form-label">Observaciones:</div>
+                                        @Html.ValidationMessageFor(model =>model.observacion, "", new { @class = "text-danger" })
+                                        <textarea asp-for="observacion" class="form-control" value="@Model.observacion"
+                                                  rows="6" placeholder="Si tiene alguna observación digitela aquí..."></textarea>
+                                    </div>
+                                    <div class="d-flex">
+                                        <button type="submit" class="btn btn-green ms-auto">Registrar Mantenimiento</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

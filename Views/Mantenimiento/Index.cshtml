@@ -1,0 +1,122 @@
+﻿@model IEnumerable<AsignacionBienesINEI.Models.Entities.Mantenimiento>
+@{
+    ViewData["Title"] = "Mantenimientos";
+}
+
+@section Scripts {
+    <script src="~/js/mantenimiento/mantenimiento-lista.js"></script>
+}
+
+<form asp-action="Index" method="get">
+
+    <div class="page-wrapper">
+        <div class="container-xl">
+            <!-- Page title -->
+            <div class="page-header d-print-none">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            Mantenimientos
+                        </h2>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <a asp-action="Nuevo" class="btn btn-primary d-none d-sm-inline-block">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Registrar Mantenimiento Preventivo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row row-cards">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="table-responsive">
+                                <table id="tblMttos" class="table card-table table-vcenter text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                #
+                                            </th>
+                                           @* <th>Acciones</th>*@
+                                            <th>Control Patrimonial</th>
+                                            <th>Marca</th>
+                                            <th>Modelo</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Responsable</th>
+                                            <th>Garantía</th>
+                                            <th>Fecha Mantenimiento</th>
+                                            <th>ODEI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int count = 1;
+                                        }
+                                        @foreach (var mtto in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @count
+                                                </td>
+                                              @*  <td>
+                                                    <a class="btn-link" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#modal-edit-mtto"
+                                                       onclick="LoadModalTitleAndCode('@detalleAsignacion.Asignacion.Id')">
+                                                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                                                                <path d="M13.5 6.5l4 4"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </a>
+                                                </td>*@
+
+                                                <td><strong>@mtto.Bien!.Plaqueta</strong></td>
+                                                <td>@mtto.Bien!.Marca</td>
+                                                <td>@mtto.Bien!.Modelo</td>
+                                                <td><strong>@mtto.Estado</strong></td>
+                                                <td>@mtto.FechaRegistro</td>
+                                                <td>@mtto.Responsable</td>
+                                                
+                                                @if (mtto.Garantia == "VENCIDA")
+                                                {
+                                                    <td>
+                                                        <span class="badge bg-danger me-1"></span>
+                                                        <strong>@mtto.Garantia</strong>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span class="badge bg-success me-1"></span>
+                                                        <strong>@mtto.Garantia</strong>
+                                                    </td>
+                                                }
+
+                                                <td><strong>@mtto.FechaMantenimiento.ToShortDateString()</strong></td>
+                                                <td>@mtto.Odei</td>
+                                                @{
+                                                    count = count + 1;
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

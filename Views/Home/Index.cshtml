@@ -1,0 +1,173 @@
+﻿@model IEnumerable<AsignacionBienesINEI.Models.Entities.Bien>
+@{
+    ViewData["Title"] = "Bienes";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/bienes/bienes.js"></script>
+}
+<script type="text/javascript">
+
+    var result = '@ViewBag.result';
+
+</script>
+
+<div class="page-wrapper">
+    <div class="container-xl">
+        <!-- Page title -->
+        <div class="page-header d-print-none">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h2 class="page-title">
+                        Administración de Bienes
+                    </h2>
+                </div>
+                <!-- Page title actions -->
+                <div class="col-auto ms-auto d-print-none">
+                    <a asp-action="RegistrarBien" class="btn btn-primary">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/printer -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-align-box-left-middle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M20 18.222v-12.444c0 -.982 -.796 -1.778 -1.778 -1.778h-12.444c-.982 0 -1.778 .796 -1.778 1.778v12.444c0 .982 .796 1.778 1.778 1.778h12.444c.982 0 1.778 -.796 1.778 -1.778z"></path>
+                            <path d="M9 15h-2"></path>
+                            <path d="M13 12h-6"></path>
+                            <path d="M11 9h-4"></path>
+                        </svg>
+                        Registrar Bien
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body border-bottom py-3">
+                        <div class="d-flex">
+                            <form asp-action="Index" name="searchBienes">
+                                <div class="ms-auto text-muted">
+                                    Búsqueda por Nombre del Bien:
+                                    <div class="ms-2 d-inline-block">
+                                        <input name="nombre" onchange="SearchBienes()" type="text" class="form-control form-control-sm" aria-label="Nombre de Bien">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table card-table table-vcenter text-nowrap datatable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th></th>
+                                    <th class="w-1">
+                                        Número
+                                    </th>
+                                    <th>¿Asignado?</th>
+                                    <th>Plaqueta</th>
+                                    <th>Sbn</th>
+                                    <th>Nombre</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Serie</th>
+                                    <th>Tipo</th>
+                                    <th>Dimensiones</th>
+                                    <th>Color</th>
+                                    <th>Estado</th>
+                                    <th>Operativo</th>
+                                    <th>Observaciones</th>
+                                    <th>Proyecto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count = 1;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @count
+                                        </td>
+                                        <td>
+                                            <div class="btn-list flex-nowrap">
+                                                <a asp-action="GestionarBien" asp-route-idBien="@item.Id" class="btn btn-blue">
+                                                    Gestionar
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>@item.Numero</td>
+                                        @if (item.Asignado == true)
+                                        {
+                                            <td>
+                                                <span class="badge bg-danger me-1"></span>
+                                                Si
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <span class="badge bg-success me-1"></span>
+                                                No
+                                            </td>
+                                        }
+                                        <td><code><strong>@item.Plaqueta</strong></code></td>
+                                        <td>@item.Sbn</td>
+                                        <td><strong>@item.Nombre</strong></td>
+                                        <td>
+                                            @item.Marca
+                                        </td>
+                                        <td>
+                                            @item.Modelo
+                                        </td>
+                                        <td>
+                                            @item.Serie
+                                        </td>
+                                        <td>
+                                            @item.Tipo
+                                        </td>
+                                        <td>
+                                            @item.Dimensiones
+                                        </td>
+                                        <td>
+                                            @item.Color
+                                        </td>
+                                        <td>
+                                            @item.Estado
+                                        </td>
+                                        <td>
+                                            @item.Operativo
+                                        </td>
+                                        <td>
+                                            @item.Observaciones
+                                        </td>
+                                        <td>
+                                            @item.Proy
+                                        </td>
+                                        @{
+                                            count = count + 1;
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        @*paginador*@
+                        <partial name="_pager" model="@pager" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
